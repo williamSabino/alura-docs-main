@@ -1,11 +1,24 @@
-const socket = io();
+import { editorTexto, selectDocument } from "./socket-front.js";
+
 
 const editor = document.getElementById('editor-texto');
+const titulo = document.getElementById('titulo-documento');
+const queryParams = new URLSearchParams(window.location.search);
+const documentoAtual = queryParams.get('nome');
 
-editor.addEventListener('keyup', ()=>{
-    socket.emit("editor_Texto", editor.value);
+titulo.textContent = documentoAtual || "Documento Não definido";
+
+editor.addEventListener('keyup', () => {
+    editorTexto({
+        texto: editor.value,
+        documento: documentoAtual,
+    });
 });
 
-socket.on("editor_Texto_servidor", (texto)=>{
+function textAreaText(texto) {
     editor.value = texto;
-});
+}
+
+selectDocument(documentoAtual);
+
+export { textAreaText };
