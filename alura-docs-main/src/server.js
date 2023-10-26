@@ -3,6 +3,7 @@ import url from 'url';
 import path from 'path';
 import http from 'http';
 import { Server } from 'socket.io';
+import "../src/dbAtlas.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
