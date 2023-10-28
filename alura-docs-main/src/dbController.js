@@ -10,4 +10,20 @@ let encontrarDocumento = (nome) => {
     return documento;
 }
 
-export {atualizarDocumento, encontrarDocumento};
+let listarDocumentos = ()=>{
+    const documentos = documentsCollections.find().toArray();
+    return documentos;
+};
+
+let inserirDocumento = (nome) =>{
+    documentsCollections.insertOne({
+        nome: nome,
+        texto: `Texto do documento: ${nome}`,
+    })
+}
+
+let deleteDocumento = (documento) => {
+    documentsCollections.deleteOne({nome: documento});
+}
+
+export {atualizarDocumento, encontrarDocumento, listarDocumentos, inserirDocumento, deleteDocumento};

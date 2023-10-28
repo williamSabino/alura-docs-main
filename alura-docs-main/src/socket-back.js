@@ -1,8 +1,34 @@
-import { atualizarDocumento, encontrarDocumento } from "./dbController.js";
+import { atualizarDocumento, deleteDocumento, encontrarDocumento, inserirDocumento, listarDocumentos } from "./dbController.js";
 import io from "./server.js";
 
 //escutando o evento de conexão que ocorre quando abre documento.html
 io.on('connection', (socket) => {
+    console.log("conectado, user: " + socket.id);
+
+    socket.on('pegar_documentos', async (documentos) => {
+        const documentosDB = await listarDocumentos();
+        documentos(documentosDB);
+    });
+
+    socket.on('inserirDocumento', async (documento) => {
+        const documentoExistente = (await encontrarDocumento(documento) !== null);
+        if (documentoExistente) {
+            socket.emit('documento_existente', documento);
+        } else {
+            await inserirDocumento(documento);
+            io.emit('inserir_Documento_interface', documento);
+        }
+    });
+
+    socket.on('excluir_Documento', async (documento) => {
+        await deleteDocumento(documento);
+
+        io.emit('excluir_Documento_sucesso', documento);
+    });
+
+
+
+
     //escutando a seleção de documentos
     socket.on('select_document', async (document, cbDevolverTexto) => {
         //busca no banco de dados o documento selecionado no front

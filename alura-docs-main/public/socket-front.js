@@ -1,4 +1,4 @@
-import { textAreaText } from "./documento.js";
+import { alertareRedirecionar, textAreaText } from "./documento.js";
 
 const socket = io();
 
@@ -17,4 +17,12 @@ function selectDocument(documento) {
     });
 }
 
-export { editorTexto, selectDocument };
+function excluirDocumento(documento){
+    socket.emit("excluir_Documento", documento);
+}
+
+socket.on('excluir_Documento_sucesso', (documento) => {
+    alertareRedirecionar(documento);
+});
+
+export { editorTexto, selectDocument, excluirDocumento };
