@@ -1,15 +1,24 @@
-import { atualizarDocumento, deleteDocumento, encontrarDocumento, inserirDocumento, listarDocumentos } from "./dbController.js";
+import {
+    atualizarDocumento,
+    deleteDocumento,
+    encontrarDocumento,
+    inserirDocumento,
+    listarDocumentos
+} from "./dbController.js";
 import io from "./server.js";
 
 //escutando o evento de conexão que ocorre quando abre documento.html
 io.on('connection', (socket) => {
+    //exibindo o id de conexão do socket de cada conexão
     console.log("conectado, user: " + socket.id);
 
+    //escutando o evento e pegando todos os documentos no banco de dados
     socket.on('pegar_documentos', async (documentos) => {
         const documentosDB = await listarDocumentos();
         documentos(documentosDB);
     });
 
+    //escutando o evento de inserir documentos na pagina index
     socket.on('inserirDocumento', async (documento) => {
         const documentoExistente = (await encontrarDocumento(documento) !== null);
         if (documentoExistente) {
@@ -20,14 +29,11 @@ io.on('connection', (socket) => {
         }
     });
 
+    //escutando o evento de excluir documentos na pagina index
     socket.on('excluir_Documento', async (documento) => {
         await deleteDocumento(documento);
-
         io.emit('excluir_Documento_sucesso', documento);
     });
-
-
-
 
     //escutando a seleção de documentos
     socket.on('select_document', async (document, cbDevolverTexto) => {
