@@ -2,38 +2,9 @@ import {
     atualizarDocumento,
     deleteDocumento,
     encontrarDocumento,
-<<<<<<< HEAD:alura-docs-main/src/socket-back.js
-    inserirDocumento,
-    listarDocumentos
-} from "./dbController.js";
-import io from "./server.js";
-
-//escutando o evento de conexão que ocorre quando abre documento.html
-io.on('connection', (socket) => {
-    //exibindo o id de conexão do socket de cada conexão
-    console.log("conectado, user: " + socket.id);
-
-    //escutando o evento e pegando todos os documentos no banco de dados
-    socket.on('pegar_documentos', async (documentos) => {
-        const documentosDB = await listarDocumentos();
-        documentos(documentosDB);
-    });
-
-    //escutando o evento de inserir documentos na pagina index
-    socket.on('inserirDocumento', async (documento) => {
-        const documentoExistente = (await encontrarDocumento(documento) !== null);
-        if (documentoExistente) {
-            socket.emit('documento_existente', documento);
-        } else {
-            await inserirDocumento(documento);
-            io.emit('inserir_Documento_interface', documento);
-        }
-    });
-=======
 } from "../db/documentosController.js";
 
 function registrosSocketDocumento(socket, io) {
->>>>>>> 0b9ada44280978608d163f264404c5514c09346d:alura-docs-main/server/registros/EventoDocumento.js
 
     //escutando o evento de excluir documentos na pagina index
     socket.on('excluir_Documento', async (documento) => {
