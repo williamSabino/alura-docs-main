@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon ./src/socket-back.js",
+    "dev": "nodemon ./server/socket-back.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

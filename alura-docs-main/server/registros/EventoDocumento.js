@@ -2,6 +2,7 @@ import {
     atualizarDocumento,
     deleteDocumento,
     encontrarDocumento,
+<<<<<<< HEAD:alura-docs-main/src/socket-back.js
     inserirDocumento,
     listarDocumentos
 } from "./dbController.js";
@@ -28,6 +29,11 @@ io.on('connection', (socket) => {
             io.emit('inserir_Documento_interface', documento);
         }
     });
+=======
+} from "../db/documentosController.js";
+
+function registrosSocketDocumento(socket, io) {
+>>>>>>> 0b9ada44280978608d163f264404c5514c09346d:alura-docs-main/server/registros/EventoDocumento.js
 
     //escutando o evento de excluir documentos na pagina index
     socket.on('excluir_Documento', async (documento) => {
@@ -55,5 +61,6 @@ io.on('connection', (socket) => {
         //emite para o grupo do documento selecionado e envia de volta o texto para ser printado no front.
         socket.to(dados.documento).emit('editor_Texto_servidor', dados.texto);
     });
-});
+}
 
+export default registrosSocketDocumento;

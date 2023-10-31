@@ -6,7 +6,7 @@ const inputDocumento = document.querySelector("#input-documento");
 
 function inserirLinha(documento) {
   lista.innerHTML += `
-    <a href="documento.html?nome=${documento}"
+    <a href="./documento/documento.html?nome=${documento}"
      class="list-group-item list-group-item-action"
      id="documento-${documento}"
      >
