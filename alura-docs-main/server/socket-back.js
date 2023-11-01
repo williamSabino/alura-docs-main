@@ -1,4 +1,4 @@
-
+import "dotenv/config";
 import registrosSocketCadastro from "./registros/EventoCadastro.js";
 import registrosSocketDocumento from "./registros/EventoDocumento.js";
 import registrosSocktInicio from "./registros/EventoInicio.js";

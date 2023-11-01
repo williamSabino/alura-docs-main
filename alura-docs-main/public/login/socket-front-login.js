@@ -1,3 +1,5 @@
+import { definirCookie } from "../utils/cookies.js";
+
 const socket = io();
 
 function autenticarUsuario(dados) {
@@ -8,8 +10,10 @@ socket.on('usuarioInvalido', () => {
     alert("usuario invalido");
 });
 
-socket.on('AutenticadoComSucesso', () => {
+socket.on('AutenticadoComSucesso', (jwtToken) => {
+    definirCookie("jwtToken", jwtToken);
     alert("Autenticado Com Sucesso");
+    window.location.href = "/";
 })
 
 socket.on('FalhaNaAutenticacao', () => {
