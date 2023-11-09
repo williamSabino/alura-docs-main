@@ -1,6 +1,17 @@
 import { inserirLinha, removerLinha } from "./index.js";
+import { obterCookie } from "./utils/cookies.js";
 
-const socket = io();
+const socket = io("/usuarios",{
+    auth:{
+        token: obterCookie("jwtToken"),
+    }
+});
+
+socket.on("connect_error",(err)=>{
+    alert(err);
+    window.location.href = '/login';
+});
+
 socket.emit('pegar_documentos', (documentos) => {
     documentos.forEach((document) => {
         inserirLinha(document.nome);

@@ -3,6 +3,7 @@ import {
     deleteDocumento,
     encontrarDocumento,
 } from "../db/documentosController.js";
+import { deletarUser, inserirUser, listarUsers, procurarConexao } from "../utils/listaDeUsuarios.js";
 
 function registrosSocketDocumento(socket, io) {
 
@@ -13,15 +14,37 @@ function registrosSocketDocumento(socket, io) {
     });
 
     //escutando a seleção de documentos
-    socket.on('select_document', async (document, cbDevolverTexto) => {
+    socket.on('select_document', async ({ documentoAtual, usuarioAtual }, cbDevolverTexto) => {
         //busca no banco de dados o documento selecionado no front
-        const dbDocument = await encontrarDocumento(document);
+        const dbDocument = await encontrarDocumento(documentoAtual);
         if (dbDocument) {
-            //devolve o texto do banco de dados para ser printado no text-area do front
-            cbDevolverTexto(dbDocument.texto);
-        }
-        //agrupa a informação do socket no documento selecionado
-        socket.join(document);
+
+            const conexaoEncontrada = procurarConexao(usuarioAtual, documentoAtual);
+            
+            if(!conexaoEncontrada){
+                socket.data = {
+                    conectado: true,
+                };
+                //agrupa a informação do socket no documento selecionado
+                socket.join(documentoAtual);
+                inserirUser({ nomeDocumento: documentoAtual, nomeUser: usuarioAtual });
+                const usersLista = listarUsers(documentoAtual);
+                io.to(documentoAtual).emit('usersNoDocumento', usersLista);
+                //devolve o texto do banco de dados para ser printado no text-area do front
+                cbDevolverTexto(dbDocument.texto);
+            } else {
+                socket.emit('conexaoEncontrada');
+            }
+            }
+
+
+        socket.on('disconnect', () => {
+           if (socket.data.conectado) {
+            deletarUser(usuarioAtual, documentoAtual);
+            const usersLista = listarUsers(documentoAtual);
+            io.to(documentoAtual).emit('usersNoDocumento', usersLista);
+           }
+        });
     });
 
     //escutando o evento de text area enviado pela dom

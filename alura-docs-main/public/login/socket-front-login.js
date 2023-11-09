@@ -2,6 +2,10 @@ import { definirCookie } from "../utils/cookies.js";
 
 const socket = io();
 
+socket.on("connect_error", (err) => {
+    alert(err);
+});
+
 function autenticarUsuario(dados) {
     socket.emit('autenticarUsuario', dados);
 };
